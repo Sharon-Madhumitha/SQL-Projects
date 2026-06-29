@@ -3,11 +3,9 @@ This repository contains a collection of SQL projects that provide hands-on expe
 
 Here's a professional **README description** you can use for an **SQL Projects** GitHub repository.
 
----
+--
 
-# SQL Projects
-
-## 📌 About
+##  About
 
 This repository contains a collection of SQL projects designed to improve database design, querying, and data analysis skills. The projects cover fundamental to advanced SQL concepts using real-world scenarios, helping learners understand how relational databases are used in practical applications.
 
@@ -15,7 +13,7 @@ Each project includes database schema creation, sample data, SQL queries, and so
 
 ---
 
-## 🚀 What You'll Find
+##  What You'll Find
 
 * Database Design
 * Table Creation (DDL)
@@ -39,7 +37,7 @@ Each project includes database schema creation, sample data, SQL queries, and so
 
 ---
 
-## 🎯 Objectives
+##  Objectives
 
 * Learn SQL from beginner to advanced level.
 * Practice real-world database problems.
@@ -49,7 +47,7 @@ Each project includes database schema creation, sample data, SQL queries, and so
 
 ---
 
-## 💻 Technologies Used
+##  Technologies Used
 
 * SQL
 * MySQL / PostgreSQL / SQL Server (depending on the project)
@@ -57,7 +55,7 @@ Each project includes database schema creation, sample data, SQL queries, and so
 
 ---
 
-## 📂 Repository Structure
+##  Repository Structure
 
 ```text
 SQL-Projects/
@@ -79,7 +77,7 @@ SQL-Projects/
 
 ---
 
-## 🌟 Features
+##  Features
 
 * Beginner-friendly examples
 * Real-world database scenarios
@@ -90,7 +88,7 @@ SQL-Projects/
 
 ---
 
-## 📚 Topics Covered
+##  Topics Covered
 
 * CRUD Operations
 * Primary & Foreign Keys
@@ -108,7 +106,7 @@ SQL-Projects/
 
 ---
 
-## 🤝 Contributions
+##  Contributions
 
 Contributions are welcome! Feel free to fork this repository, submit pull requests, or open issues to suggest improvements or add new SQL projects.
 
