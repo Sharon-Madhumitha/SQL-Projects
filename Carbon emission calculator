@@ -1,0 +1,357 @@
+# 1. Project Folder Structure
+
+Carbon-Emission-Calculator/
+│
+├── backend/
+│   ├── package.json
+│   ├── server.js
+│   ├── config/
+│   │     db.js
+│   ├── database/
+│   │     carbon_emission.sql
+│   ├── controllers/
+│   ├── models/
+│   ├── routes/
+│   ├── middleware/
+│   ├── services/
+│   └── utils/
+│
+└── frontend/
+```
+
+---
+
+# 2. backend/package.json
+
+```json
+{
+  "name": "carbon-emission-calculator",
+  "version": "1.0.0",
+  "description": "Carbon Emission Calculator for Buildings",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "carbon",
+    "node",
+    "express",
+    "mysql"
+  ],
+  "author": "Your Name",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mysql2": "^3.10.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}
+```
+
+Install packages
+
+```bash
+npm install
+```
+
+---
+
+# 3. Create Database
+
+Open MySQL Workbench
+
+```sql
+CREATE DATABASE carbon_emission_db;
+USE carbon_emission_db;
+```
+
+---
+
+# 4. backend/database/carbon_emission.sql
+
+```sql
+CREATE DATABASE IF NOT EXISTS carbon_emission_db;
+
+USE carbon_emission_db;
+
+CREATE TABLE buildings (
+
+id INT PRIMARY KEY AUTO_INCREMENT,
+
+building_name VARCHAR(100) NOT NULL,
+
+building_type VARCHAR(50),
+
+area DOUBLE,
+
+floors INT,
+
+location VARCHAR(100),
+
+climatic_zone VARCHAR(50),
+
+flooring VARCHAR(50),
+
+insulation VARCHAR(50),
+
+lighting VARCHAR(50),
+
+hvac VARCHAR(50),
+
+appliances VARCHAR(50),
+
+material VARCHAR(50),
+
+material_quantity DOUBLE,
+
+electricity DOUBLE,
+
+heating DOUBLE,
+
+cooling DOUBLE,
+
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+);
+
+CREATE TABLE emission_factors(
+
+id INT PRIMARY KEY AUTO_INCREMENT,
+
+material VARCHAR(50),
+
+emission_factor DOUBLE
+
+);
+
+CREATE TABLE climatic_zones(
+
+id INT PRIMARY KEY AUTO_INCREMENT,
+
+zone VARCHAR(50),
+
+energy_multiplier DOUBLE
+
+);
+```
+
+Execute the above script.
+
+---
+
+# 5. Insert Emission Factors
+
+```sql
+INSERT INTO emission_factors(material, emission_factor)
+
+VALUES
+
+('Concrete',0.13),
+
+('Steel',2.10),
+
+('Brick',0.20),
+
+('Wood',0.05),
+
+('Glass',0.85),
+
+('Aluminium',1.70),
+
+('Stone',0.15);
+```
+
+---
+
+# 6. Insert Climatic Zones
+
+```sql
+INSERT INTO climatic_zones(zone,energy_multiplier)
+
+VALUES
+
+('Hot',1.35),
+
+('Warm',1.20),
+
+('Moderate',1.00),
+
+('Cold',1.60),
+
+('Very Cold',1.90);
+```
+
+---
+
+# 7. Sample Building Records (Optional)
+
+```sql
+INSERT INTO buildings(
+
+building_name,
+
+building_type,
+
+area,
+
+floors,
+
+location,
+
+climatic_zone,
+
+flooring,
+
+insulation,
+
+lighting,
+
+hvac,
+
+appliances,
+
+material,
+
+material_quantity,
+
+electricity,
+
+heating,
+
+cooling
+
+)
+
+VALUES
+
+(
+
+'Green Residency',
+
+'Residential',
+
+2500,
+
+3,
+
+'Hyderabad',
+
+'Hot',
+
+'Tiles',
+
+'High',
+
+'LED',
+
+'Central HVAC',
+
+'Efficient',
+
+'Concrete',
+
+200,
+
+1500,
+
+250,
+
+500
+
+);
+```
+
+---
+
+# 8. backend/config/db.js
+
+```javascript
+const mysql = require("mysql2");
+
+const connection = mysql.createConnection({
+
+    host: "localhost",
+
+    user: "root",
+
+    password: "YOUR_PASSWORD",
+
+    database: "carbon_emission_db"
+
+});
+
+connection.connect((err) => {
+
+    if (err) {
+
+        console.log("Database Connection Failed");
+
+        console.log(err);
+
+        return;
+
+    }
+
+    console.log("MySQL Connected Successfully");
+
+});
+
+module.exports = connection;
+```
+
+> Replace `"YOUR_PASSWORD"` with your MySQL password.
+
+---
+
+# 9. Install Required Packages
+
+```bash
+npm install express mysql2 cors dotenv
+npm install --save-dev nodemon
+```
+
+---
+
+# 10. Test Database Connection
+
+Create a temporary file named `testConnection.js` in the `backend` folder:
+
+```javascript
+const db = require("./config/db");
+
+db.query("SELECT * FROM climatic_zones", (err, result) => {
+    if (err) {
+        console.log(err);
+    } else {
+        console.log(result);
+    }
+
+    process.exit();
+});
+```
+
+Run:
+
+```bash
+node testConnection.js
+```
+
+
+Expected output:
+
+```text
+MySQL Connected Successfully
+
+[
+ { id: 1, zone: 'Hot', energy_multiplier: 1.35 },
+ { id: 2, zone: 'Warm', energy_multiplier: 1.20 },
+ { id: 3, zone: 'Moderate', energy_multiplier: 1.00 },
+ { id: 4, zone: 'Cold', energy_multiplier: 1.60 },
+ { id: 5, zone: 'Very Cold', energy_multiplier: 1.90 }
+]
+```
