@@ -355,3 +355,389 @@ MySQL Connected Successfully
  { id: 5, zone: 'Very Cold', energy_multiplier: 1.90 }
 ]
 ```
+Excellent! In **Part 2**, we'll create the Express server and configure the application's routes. By the end of this part, you'll have a backend server running with placeholder API endpoints that we'll implement in the next parts.
+
+---
+## Project Structure
+
+```text
+backend/
+│
+├── server.js
+├── package.json
+│
+├── config/
+│      db.js
+│
+├── routes/
+│      buildingRoutes.js
+│
+├── controllers/
+│
+├── models/
+│
+├── services/
+│
+├── middleware/
+│
+└── database/
+```
+
+---
+
+# 1. Create `backend/server.js`
+
+```javascript
+const express = require("express");
+const cors = require("cors");
+const dotenv = require("dotenv");
+
+dotenv.config();
+
+const app = express();
+
+const buildingRoutes = require("./routes/buildingRoutes");
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Default Route
+app.get("/", (req, res) => {
+    res.json({
+        success: true,
+        message: "Carbon Emission Calculator API is Running"
+    });
+});
+
+// API Routes
+app.use("/api/buildings", buildingRoutes);
+
+// Invalid Route
+app.use((req, res) => {
+    res.status(404).json({
+        success: false,
+        message: "Route Not Found"
+    });
+});
+
+// Server
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+    console.log(`Server running on Port ${PORT}`);
+});
+```
+
+---
+
+# 2. Create `.env`
+
+Create a file named:
+
+```
+backend/.env
+```
+
+```env
+PORT=5000
+```
+
+Later we can also store MySQL credentials here.
+
+---
+
+# 3. Create `backend/routes/buildingRoutes.js`
+
+```javascript
+const express = require("express");
+
+const router = express.Router();
+
+// Controllers
+const {
+    getAllBuildings,
+    getBuildingById,
+    addBuilding,
+    updateBuilding,
+    deleteBuilding,
+    calculateEmission
+} = require("../controllers/buildingController");
+
+// Routes
+
+// Get all buildings
+router.get("/", getAllBuildings);
+
+// Get one building
+router.get("/:id", getBuildingById);
+
+// Add building
+router.post("/", addBuilding);
+
+// Update building
+router.put("/:id", updateBuilding);
+
+// Delete building
+router.delete("/:id", deleteBuilding);
+
+// Calculate emission
+router.post("/calculate", calculateEmission);
+
+module.exports = router;
+```
+
+---
+
+# 4. Create `backend/controllers/buildingController.js`
+
+For now, these are placeholder functions. We'll connect them to the database in Part 3.
+
+```javascript
+exports.getAllBuildings = (req, res) => {
+
+    res.json({
+        success: true,
+        message: "Get All Buildings API"
+    });
+
+};
+
+exports.getBuildingById = (req, res) => {
+
+    res.json({
+        success: true,
+        message: `Get Building ${req.params.id}`
+    });
+
+};
+
+exports.addBuilding = (req, res) => {
+
+    res.json({
+        success: true,
+        message: "Add Building API"
+    });
+
+};
+
+exports.updateBuilding = (req, res) => {
+
+    res.json({
+        success: true,
+        message: `Update Building ${req.params.id}`
+    });
+
+};
+
+exports.deleteBuilding = (req, res) => {
+
+    res.json({
+        success: true,
+        message: `Delete Building ${req.params.id}`
+    });
+
+};
+
+exports.calculateEmission = (req, res) => {
+
+    res.json({
+        success: true,
+        message: "Carbon Emission Calculation API"
+    });
+
+};
+```
+
+---
+
+# 5. Verify Folder Structure
+
+```
+backend/
+
+server.js
+
+package.json
+
+.env
+
+config/
+    db.js
+
+controllers/
+    buildingController.js
+
+routes/
+    buildingRoutes.js
+
+database/
+    carbon_emission.sql
+```
+
+---
+
+# 6. Start the Server
+
+Install packages if you haven't already:
+
+```bash
+npm install
+```
+
+Run the application:
+
+```bash
+npm run dev
+```
+
+or
+
+```bash
+node server.js
+```
+
+---
+
+# 7. Expected Terminal Output
+
+```
+MySQL Connected Successfully
+
+Server running on Port 5000
+```
+
+---
+
+# 8. Test in Browser
+
+Open:
+
+```
+http://localhost:5000/
+```
+
+Output
+
+```json
+{
+  "success": true,
+  "message": "Carbon Emission Calculator API is Running"
+}
+```
+
+---
+
+# 9. Test APIs
+
+### Get All Buildings
+
+```
+GET
+
+http://localhost:5000/api/buildings
+```
+
+Response
+
+```json
+{
+    "success": true,
+    "message": "Get All Buildings API"
+}
+```
+
+---
+
+### Get Building
+
+```
+GET
+
+http://localhost:5000/api/buildings/5
+```
+
+Response
+
+```json
+{
+    "success": true,
+    "message": "Get Building 5"
+}
+```
+
+---
+
+### Add Building
+
+```
+POST
+
+http://localhost:5000/api/buildings
+```
+
+Response
+
+```json
+{
+    "success": true,
+    "message": "Add Building API"
+}
+```
+
+---
+
+### Update Building
+
+```
+PUT
+
+http://localhost:5000/api/buildings/3
+```
+
+Response
+
+```json
+{
+    "success": true,
+    "message": "Update Building 3"
+}
+```
+
+---
+
+### Delete Building
+
+```
+DELETE
+
+http://localhost:5000/api/buildings/4
+```
+
+Response
+
+```json
+{
+    "success": true,
+    "message": "Delete Building 4"
+}
+```
+
+---
+
+### Calculate Emission
+
+```
+POST
+
+http://localhost:5000/api/buildings/calculate
+```
+
+Response
+
+```json
+{
+    "success": true,
+    "message": "Carbon Emission Calculation API
+}
